@@ -63,7 +63,12 @@ db.sqlite3-journal
 
 # Flask stuff:
 instance/
+flask_session/
 .webassets-cache
+
+# VS Code
+.vscode/
+local.txt
 
 # Scrapy stuff:
 .scrapy

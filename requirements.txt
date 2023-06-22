@@ -1,0 +1,8 @@
+requests
+bs4
+
+# TODO
+# Scrap data into database
+# Prepare API specification with AWS API gateway functionality
+# Build AWS free tier infra - API getaway triggers lambda, lambda requests Aurora DB data
+# All user - application interaction is done via CLI

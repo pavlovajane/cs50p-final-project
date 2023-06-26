@@ -1,33 +1,37 @@
-# logic to scrap data for the database from website
-from bs4 import BeautifulSoup, NavigableString
-from bs4.element import Tag
-from typing import Union, Dict
+# logic to scrap data for the database from website or html file
+from bs4 import Tag, BeautifulSoup, NavigableString
+from typing import Dict
 import argparse
 import collections, io
 import csv, requests
 import re, sys
-import roman 
 from time import sleep
+import roman # type: ignore
+
 
 def main() -> None:
     """
     Main function calls check on CLI arguments, parse html function and write parsed into
-    csv file
+    csv file. Support two modes:
+    -m in command line is given - doesn't require -p parameter and works in multi-links mode - links are pre-defined in
+    get_links()
+    -p in command line is given - program parses only from given file
     :return: No return value
     :rtype: None
     """
     args = check_cli_arguments()
-    
-    if args.p:
-    # Option for one input file parsing
-        arr = parse(args.p, False)
-        write_to_csv(args.f,arr)
-    elif args.m:
+
+    if args.m:
     # Option for parsing of a links array
         links = get_links()
         for link in links:
-            arr = parse(link, True)
+            arr = parse(link, 1)
             write_to_csv(args.f,arr)
+    elif args.p:
+    # Option for one input file parsing
+        arr = parse(args.p, args.h)
+        write_to_csv(args.f,arr)
+
 
 def check_cli_arguments() -> argparse.Namespace:
     """
@@ -36,28 +40,31 @@ def check_cli_arguments() -> argparse.Namespace:
     :rtype: argparse.Namespace
     """
     parser = argparse.ArgumentParser(prog="datascrapper.py", description="Parse html file into csv")
-    parser.add_argument("-m", action='store_true', help="Multi-link mode - links for scrapping are in the code, -p is not needed")
+    parser.add_argument("-m", action='store_true', help="Multi-link mode - links for scrapping are in the code, -p, -h are not needed")
     parser.add_argument("-p", help="File name of html file to parse")
-    parser.add_argument("-f", nargs='?', default = "results.csv", help="File name of csv file to write parsed results to")
+    parser.add_argument("-h", nargs="?", default = 0, help="1 - parse html file by the given in -p link,\
+                         0 - parse html file by given in -p path")
+    parser.add_argument("-f", nargs="?", default = "results.csv", help="File name of csv file to write parsed results to")
     args = parser.parse_args()
 
     if (args.m and args.p) or (not args.m and not args.p):
-        parser.print_usage() 
-        parser.exit(1) 
+        parser.print_usage()
+        parser.exit(1)
     if args.p and args.p.find(".htm") == -1:
         print("Wrong -p parameter - should be htm or html file")
-        parser.exit(1)  
+        parser.exit(1)
     if args.f and args.f.find(".csv") == -1:
         print("Wrong -f parameter - should be csv file")
-        parser.exit(1) 
+        parser.exit(1)
 
-    return args     
+    return args
 
 def get_links() -> collections.abc.MutableSequence:
+    # one time operation - all data scrapped into parsed_results.csv
     links = []
-    
+
     # list of html pages for Life of Brian scripts
-    # http://montypython.50webs.com/Life_of_Brian.htm 
+    # http://montypython.50webs.com/Life_of_Brian.htm
     for i in range(35):
         links.append(f"http://montypython.50webs.com/scripts/Life_of_Brian/{i+1}.htm")
 
@@ -96,18 +103,23 @@ def write_to_csv(fname: str, arr: collections.abc.MutableSequence) -> None:
         for row in arr:
             data.append(row)
 
-        fieldnames = reader.fieldnames  
+        if reader.fieldnames is not None:
+            fieldnames = list(reader.fieldnames)
+        else:
+            sys.exit("No fieldnames found in the scv file")
+
         with open(fname, "w", newline="") as file:
             writer = csv.DictWriter(file, fieldnames=fieldnames)
-            writer.writeheader()  
-            writer.writerows(data)  
+            writer.writeheader()
+            writer.writerows(data)
 
     except FileNotFoundError:
         # if file not exists - create it and write
         with open(fname, "w", newline="") as file:
             writer = csv.DictWriter(file, fieldnames=fieldnames)
-            writer.writeheader()  
-            writer.writerows(arr)   
+            writer.writeheader()
+            writer.writerows(arr)
+    return None
 
 def is_dialogue(tag: Tag) -> bool:
     """
@@ -121,7 +133,9 @@ def is_dialogue(tag: Tag) -> bool:
         for ch in tag.children:
             if isinstance(ch, NavigableString):
                 continue
-            return ch.has_attr("class") and ch["class"]==["name"] and ch.name == "span"
+            if isinstance(ch, Tag):
+                return ch.name == "span" and ch.has_attr("class") and ch["class"]==["name"]
+    return False
 
 def is_directions(tag: Tag) -> bool:
     """
@@ -135,7 +149,9 @@ def is_directions(tag: Tag) -> bool:
         for ch in tag.children:
             if isinstance(ch, NavigableString):
                 continue
-            return ch.name == "i"
+            if isinstance(ch, Tag):
+                return ch.name == "i"
+    return False
 
 def parse_scene(text: str) -> Dict[str, str]:
     """
@@ -157,14 +173,15 @@ def parse_scene(text: str) -> Dict[str, str]:
         elif scene_number.find("Scene") != -1:
             scene_number = scene_number.replace("Scene","").strip()
         scene_name = matches.group("Scene_name")
-        
+
     return {"scene_number": scene_number, "scene_name": scene_name}
-        
-def parse(html: Union[str, 'io.IOBase'], url = True) -> collections.abc.MutableSequence:
+
+def parse(html: str, url: int = 1) -> collections.abc.MutableSequence:
     """
     Parse given html. Parser is expecting <p> tags with <span> tags inside with class == 'name' - dialogues and
     <p> tags with <i> tags inside - directions. Source - http://montypython.50webs.com/scripts/Holy_Grail/Scene3.htm
     :param html: An html file to parse
+    :param url: 0 - parse as a file, 1 - parse as html link
     :return: array of dictionaries with keys: movie, scene_number, scene, character, type (enum: direction, dialogue), phrase
     :rtype: array
     """
@@ -174,7 +191,7 @@ def parse(html: Union[str, 'io.IOBase'], url = True) -> collections.abc.MutableS
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
             "Accept-Encoding": "gzip, deflate",
             "Accept-Language": "en-GB,en;q=0.9",
-            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5 Safari/605.1.15"   
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5 Safari/605.1.15"
         }
         sleep(1)
         r = requests.get(html, headers=headers, verify=False)
@@ -185,7 +202,7 @@ def parse(html: Union[str, 'io.IOBase'], url = True) -> collections.abc.MutableS
             with open(html,'r', encoding='iso-8859-1') as fp:
                 soup = BeautifulSoup(fp, 'html.parser')
         except FileNotFoundError:
-            sys.exit(f"{html} file not found")       
+            sys.exit(f"{html} file not found")
 
     # resulting array of dicts
     result = []
@@ -211,13 +228,13 @@ def parse(html: Union[str, 'io.IOBase'], url = True) -> collections.abc.MutableS
             add_entry = False
             if is_dialogue(tg):
                 character = tg.next.text.replace(":","").strip()
-                phrase = tg.text.replace(tg.next.text,"").replace("\n","").strip()  
-                phtype = "dialogue" 
-                add_entry = True      
+                phrase = tg.text.replace(tg.next.text,"").replace("\n","").strip()
+                phtype = "dialogue"
+                add_entry = True
             elif is_directions(tg):
                 character = "NULL"
-                phrase = tg.text.replace("\n","").strip()  
-                phtype = "direction"  
+                phrase = tg.text.replace("\n","").strip()
+                phtype = "direction"
                 add_entry = True
 
             if add_entry:
@@ -231,11 +248,11 @@ def parse(html: Union[str, 'io.IOBase'], url = True) -> collections.abc.MutableS
                 entry["type"] = phtype
                 entry["text"] = phrase
 
-                result.append(entry)       
-        except: 
+                result.append(entry)
+        except:
             sys.exit(f"{fp} format is not parsable")
- 
+
     return result
-    
+
 if __name__ == "__main__":
     main()

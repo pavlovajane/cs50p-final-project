@@ -1,0 +1,526 @@
+openapi: 3.0.0
+info:
+  title: MONTY PYTHON BEST QUOTES API
+  description: "With this API you can get quotes/scenes from 3 Monty Python movies:\
+    \ 'Life of Brian', 'The Meaning of ' and 'Monty Python and The Holy Grail'. \n\
+    User can get a quote or a whole scene. To find a specfic quote the user can use\
+    \ part of this quote, scene name/number and movie name. If the user registers\
+    \ with this API, they can also create their top favourite quotes list."
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /users:
+    post:
+      tags:
+      - users
+      summary: Create a new user
+      operationId: users_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/users_body'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error
+      x-openapi-router-controller: swagger_server.controllers.users_controller
+  /users/{id}/tops:
+    get:
+      tags:
+      - users
+      summary: Get user's top quotes sorted by quote's text
+      operationId: users_id_tops_get
+      parameters:
+      - name: id
+        in: path
+        description: User ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tops'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: The specified resource was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error
+      security:
+      - basicAuth: []
+      x-openapi-router-controller: swagger_server.controllers.users_controller
+    post:
+      tags:
+      - users
+      summary: Add a quote to user's top quotes
+      operationId: users_id_tops_post
+      parameters:
+      - name: id
+        in: path
+        description: User id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/id_tops_body'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tops'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: The specified resource was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error
+      security:
+      - basicAuth: []
+      x-openapi-router-controller: swagger_server.controllers.users_controller
+  /quotes/search:
+    get:
+      tags:
+      - quotes
+      summary: Get a quote or quotes by quote's part
+      operationId: quotes_search_get
+      parameters:
+      - name: text
+        in: query
+        description: Text to search quote(s) for
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quotes'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: The specified resource was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error
+      x-openapi-router-controller: swagger_server.controllers.quotes_controller
+  /quotes/random:
+    get:
+      tags:
+      - quotes
+      summary: Get a random quote
+      operationId: quotes_random_get
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quote'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: The specified resource was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error
+      x-openapi-router-controller: swagger_server.controllers.quotes_controller
+  /scenes/search:
+    get:
+      tags:
+      - scenes
+      summary: Search for a scene whole text by scene's number/name and movie
+      operationId: scenes_search_get
+      parameters:
+      - name: movie
+        in: query
+        description: Movie name to search scene in (or part of the name)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: scene_number
+        in: query
+        description: Scene number may be given
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: scene_name
+        in: query
+        description: Name or part of the a scene name may be given
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: scene_number_name
+        in: query
+        description: Either number or name of the scene should be given
+        required: false
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/scene_number_name'
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SceneWithQuotes'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: The specified resource was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error
+      x-openapi-router-controller: swagger_server.controllers.scenes_controller
+  /scenes/random:
+    get:
+      tags:
+      - scenes
+      summary: Get a random scene
+      description: "Return all quotes from a random scene, sorted"
+      operationId: scenes_random_get
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SceneWithQuotes'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: The specified resource was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error
+      x-openapi-router-controller: swagger_server.controllers.scenes_controller
+  /movies:
+    get:
+      tags:
+      - movies
+      summary: Get a list of available to get quotes movies
+      operationId: movies_get
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: The specified resource was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error
+      x-openapi-router-controller: swagger_server.controllers.movies_controller
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The user ID
+        username:
+          type: string
+          description: The user name
+        password:
+          type: string
+          description: Hash for the user password
+      example:
+        password: password
+        id: 0
+        username: username
+    Scene:
+      type: object
+      properties:
+        id:
+          type: integer
+        number:
+          type: integer
+          description: scene number if available
+        name:
+          type: string
+          description: scene name
+      example:
+        number: 1
+        name: name
+        id: 6
+    Movie:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      example:
+        name: name
+        id: 0
+    Quote:
+      type: object
+      properties:
+        id:
+          type: integer
+        movie:
+          $ref: '#/components/schemas/Movie'
+        scene:
+          $ref: '#/components/schemas/Scene'
+        type:
+          type: string
+          enum:
+          - dialogue
+          - direction
+        character:
+          type: string
+        quote:
+          type: string
+      example:
+        character: character
+        quote: quote
+        movie:
+          name: name
+          id: 0
+        id: 0
+        type: dialogue
+        scene:
+          number: 1
+          name: name
+          id: 6
+    Quotes:
+      type: array
+      items:
+        $ref: '#/components/schemas/Quote'
+    SceneWithQuotes:
+      type: object
+      properties:
+        scene:
+          $ref: '#/components/schemas/Scene'
+        quotes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Quote'
+      example:
+        scene:
+          number: 1
+          name: name
+          id: 6
+        quotes:
+        - character: character
+          quote: quote
+          movie:
+            name: name
+            id: 0
+          id: 0
+          type: dialogue
+          scene:
+            number: 1
+            name: name
+            id: 6
+        - character: character
+          quote: quote
+          movie:
+            name: name
+            id: 0
+          id: 0
+          type: dialogue
+          scene:
+            number: 1
+            name: name
+            id: 6
+    Tops:
+      type: array
+      description: An array of "dictionaries" with top user's quotes
+      items:
+        $ref: '#/components/schemas/Tops_inner'
+    Error:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    users_body:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    id_tops_body:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: quote id to add to the user top quotes list
+    scene_number_name:
+      type: object
+      oneOf:
+      - required:
+        - scene_number
+      - required:
+        - scene_name
+    Tops_inner:
+      type: object
+      properties:
+        movie:
+          $ref: '#/components/schemas/Movie'
+        scene:
+          $ref: '#/components/schemas/Scene'
+        type:
+          type: string
+          enum:
+          - dialogue
+          - direction
+        character:
+          type: string
+        quote:
+          type: string
+      example:
+        character: character
+        quote: quote
+        movie:
+          name: name
+          id: 0
+        type: dialogue
+        scene:
+          number: 1
+          name: name
+          id: 6
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    default:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      x-basicInfoFunc: swagger_server.controllers.authorization_controller.check_basicAuth
+

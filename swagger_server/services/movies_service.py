@@ -12,9 +12,9 @@ class MoviesService:
 
     def find_all_movies(self):
         movies = []
-        results =  self.repo.find_all("SELECT distinct 0, movie FROM scripts")
+        results =  self.repo.find_all("SELECT distinct movie FROM scripts")
         for r in results:
-            id, name = r
-            movie = Movie(id=id, name=name)
+            name = r
+            movie = Movie(name=name)
             movies.append(movie)
         return movies

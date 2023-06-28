@@ -14,28 +14,23 @@ class Scene(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, id: int=None, number: int=None, name: str=None):  # noqa: E501
+    def __init__(self, number: int=None, name: str=None):  # noqa: E501
         """Scene - a model defined in Swagger
 
-        :param id: The id of this Scene.  # noqa: E501
-        :type id: int
         :param number: The number of this Scene.  # noqa: E501
         :type number: int
         :param name: The name of this Scene.  # noqa: E501
         :type name: str
         """
         self.swagger_types = {
-            'id': int,
             'number': int,
             'name': str
         }
 
         self.attribute_map = {
-            'id': 'id',
             'number': 'number',
             'name': 'name'
         }
-        self._id = id
         self._number = number
         self._name = name
 
@@ -49,27 +44,6 @@ class Scene(Model):
         :rtype: Scene
         """
         return util.deserialize_model(dikt, cls)
-
-    @property
-    def id(self) -> int:
-        """Gets the id of this Scene.
-
-
-        :return: The id of this Scene.
-        :rtype: int
-        """
-        return self._id
-
-    @id.setter
-    def id(self, id: int):
-        """Sets the id of this Scene.
-
-
-        :param id: The id of this Scene.
-        :type id: int
-        """
-
-        self._id = id
 
     @property
     def number(self) -> int:
@@ -98,7 +72,7 @@ class Scene(Model):
     def name(self) -> str:
         """Gets the name of this Scene.
 
-        scene name  # noqa: E501
+        scene name if available  # noqa: E501
 
         :return: The name of this Scene.
         :rtype: str
@@ -109,7 +83,7 @@ class Scene(Model):
     def name(self, name: str):
         """Sets the name of this Scene.
 
-        scene name  # noqa: E501
+        scene name if available  # noqa: E501
 
         :param name: The name of this Scene.
         :type name: str

@@ -9,7 +9,7 @@ from swagger_server.models.movie import Movie
 from swagger_server.models.quote import Quote
 from swagger_server.models.quotes import Quotes
 from swagger_server.models.scene import Scene
-from swagger_server.models.scene_number_name import SceneNumberName
+from swagger_server.models.scene_number_or_name import SceneNumberOrName
 from swagger_server.models.scene_with_quotes import SceneWithQuotes
 from swagger_server.models.tops import Tops
 from swagger_server.models.tops_inner import TopsInner

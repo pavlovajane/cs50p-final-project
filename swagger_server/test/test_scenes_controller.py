@@ -6,7 +6,7 @@ from flask import json
 from six import BytesIO
 
 from swagger_server.models.error import Error  # noqa: E501
-from swagger_server.models.scene_number_name import SceneNumberName  # noqa: E501
+from swagger_server.models.scene_number_or_name import SceneNumberOrName  # noqa: E501
 from swagger_server.models.scene_with_quotes import SceneWithQuotes  # noqa: E501
 from swagger_server.test import BaseTestCase
 
@@ -28,12 +28,12 @@ class TestScenesController(BaseTestCase):
     def test_scenes_search_get(self):
         """Test case for scenes_search_get
 
-        Search for a scene whole text by scene's number/name and movie
+        Search for a whole scene (all quotes) by scene's number/name and movie
         """
         query_string = [('movie', 'movie_example'),
                         ('scene_number', 56),
                         ('scene_name', 'scene_name_example'),
-                        ('scene_number_name', SceneNumberName())]
+                        ('scene_number_or_name', SceneNumberOrName())]
         response = self.client.open(
             '/scenes/search',
             method='GET',

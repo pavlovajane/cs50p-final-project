@@ -16,7 +16,7 @@ class Quote(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, id: int=None, movie: Movie=None, scene: Scene=None, type: str=None, character: str=None, quote: str=None):  # noqa: E501
+    def __init__(self, id: int=None, movie: Movie=None, scene: Scene=None, type: str=None, character: str=None, text: str=None):  # noqa: E501
         """Quote - a model defined in Swagger
 
         :param id: The id of this Quote.  # noqa: E501
@@ -29,8 +29,8 @@ class Quote(Model):
         :type type: str
         :param character: The character of this Quote.  # noqa: E501
         :type character: str
-        :param quote: The quote of this Quote.  # noqa: E501
-        :type quote: str
+        :param text: The text of this Quote.  # noqa: E501
+        :type text: str
         """
         self.swagger_types = {
             'id': int,
@@ -38,7 +38,7 @@ class Quote(Model):
             'scene': Scene,
             'type': str,
             'character': str,
-            'quote': str
+            'text': str
         }
 
         self.attribute_map = {
@@ -47,14 +47,14 @@ class Quote(Model):
             'scene': 'scene',
             'type': 'type',
             'character': 'character',
-            'quote': 'quote'
+            'text': 'text'
         }
         self._id = id
         self._movie = movie
         self._scene = scene
         self._type = type
         self._character = character
-        self._quote = quote
+        self._text = text
 
     @classmethod
     def from_dict(cls, dikt) -> 'Quote':
@@ -179,22 +179,22 @@ class Quote(Model):
         self._character = character
 
     @property
-    def quote(self) -> str:
-        """Gets the quote of this Quote.
+    def text(self) -> str:
+        """Gets the text of this Quote.
 
 
-        :return: The quote of this Quote.
+        :return: The text of this Quote.
         :rtype: str
         """
-        return self._quote
+        return self._text
 
-    @quote.setter
-    def quote(self, quote: str):
-        """Sets the quote of this Quote.
+    @text.setter
+    def text(self, text: str):
+        """Sets the text of this Quote.
 
 
-        :param quote: The quote of this Quote.
-        :type quote: str
+        :param text: The text of this Quote.
+        :type text: str
         """
 
-        self._quote = quote
+        self._text = text

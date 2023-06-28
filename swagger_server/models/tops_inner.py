@@ -6,8 +6,7 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
-from swagger_server.models.movie import Movie  # noqa: F401,E501
-from swagger_server.models.scene import Scene  # noqa: F401,E501
+from swagger_server.models.quote import Quote  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -16,39 +15,19 @@ class TopsInner(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, movie: Movie=None, scene: Scene=None, type: str=None, character: str=None, quote: str=None):  # noqa: E501
+    def __init__(self, quote: Quote=None):  # noqa: E501
         """TopsInner - a model defined in Swagger
 
-        :param movie: The movie of this TopsInner.  # noqa: E501
-        :type movie: Movie
-        :param scene: The scene of this TopsInner.  # noqa: E501
-        :type scene: Scene
-        :param type: The type of this TopsInner.  # noqa: E501
-        :type type: str
-        :param character: The character of this TopsInner.  # noqa: E501
-        :type character: str
         :param quote: The quote of this TopsInner.  # noqa: E501
-        :type quote: str
+        :type quote: Quote
         """
         self.swagger_types = {
-            'movie': Movie,
-            'scene': Scene,
-            'type': str,
-            'character': str,
-            'quote': str
+            'quote': Quote
         }
 
         self.attribute_map = {
-            'movie': 'movie',
-            'scene': 'scene',
-            'type': 'type',
-            'character': 'character',
             'quote': 'quote'
         }
-        self._movie = movie
-        self._scene = scene
-        self._type = type
-        self._character = character
         self._quote = quote
 
     @classmethod
@@ -63,112 +42,22 @@ class TopsInner(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def movie(self) -> Movie:
-        """Gets the movie of this TopsInner.
-
-
-        :return: The movie of this TopsInner.
-        :rtype: Movie
-        """
-        return self._movie
-
-    @movie.setter
-    def movie(self, movie: Movie):
-        """Sets the movie of this TopsInner.
-
-
-        :param movie: The movie of this TopsInner.
-        :type movie: Movie
-        """
-
-        self._movie = movie
-
-    @property
-    def scene(self) -> Scene:
-        """Gets the scene of this TopsInner.
-
-
-        :return: The scene of this TopsInner.
-        :rtype: Scene
-        """
-        return self._scene
-
-    @scene.setter
-    def scene(self, scene: Scene):
-        """Sets the scene of this TopsInner.
-
-
-        :param scene: The scene of this TopsInner.
-        :type scene: Scene
-        """
-
-        self._scene = scene
-
-    @property
-    def type(self) -> str:
-        """Gets the type of this TopsInner.
-
-
-        :return: The type of this TopsInner.
-        :rtype: str
-        """
-        return self._type
-
-    @type.setter
-    def type(self, type: str):
-        """Sets the type of this TopsInner.
-
-
-        :param type: The type of this TopsInner.
-        :type type: str
-        """
-        allowed_values = ["dialogue", "direction"]  # noqa: E501
-        if type not in allowed_values:
-            raise ValueError(
-                "Invalid value for `type` ({0}), must be one of {1}"
-                .format(type, allowed_values)
-            )
-
-        self._type = type
-
-    @property
-    def character(self) -> str:
-        """Gets the character of this TopsInner.
-
-
-        :return: The character of this TopsInner.
-        :rtype: str
-        """
-        return self._character
-
-    @character.setter
-    def character(self, character: str):
-        """Sets the character of this TopsInner.
-
-
-        :param character: The character of this TopsInner.
-        :type character: str
-        """
-
-        self._character = character
-
-    @property
-    def quote(self) -> str:
+    def quote(self) -> Quote:
         """Gets the quote of this TopsInner.
 
 
         :return: The quote of this TopsInner.
-        :rtype: str
+        :rtype: Quote
         """
         return self._quote
 
     @quote.setter
-    def quote(self, quote: str):
+    def quote(self, quote: Quote):
         """Sets the quote of this TopsInner.
 
 
         :param quote: The quote of this TopsInner.
-        :type quote: str
+        :type quote: Quote
         """
 
         self._quote = quote

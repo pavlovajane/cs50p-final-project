@@ -19,7 +19,7 @@ class TestUsersController(BaseTestCase):
     def test_users_id_tops_get(self):
         """Test case for users_id_tops_get
 
-        Get user's top quotes sorted by quote's text
+        Get user's top quotes
         """
         response = self.client.open(
             '/users/{id}/tops'.format(id=56),

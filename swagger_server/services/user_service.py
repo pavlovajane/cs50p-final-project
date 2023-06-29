@@ -22,4 +22,4 @@ class UserService:
         self.repo.execute_and_commit(q, (username, hash,))
         rows = self.repo.find_all("SELECT id FROM users WHERE username = ?", (username,))
         id, = rows[0]
-        return User(id=id, username=username)
+        return User(id=id)

@@ -21,17 +21,6 @@ and open your browser here:
 http://localhost:8080/ui/
 ```
 
-Your Swagger definition lives here:
-
-```
-http://localhost:8080/swagger.json
-```
-
-To launch the integration tests, use tox:
-```
-sudo pip install tox
-tox
-```
 
 ## Running with Docker
 

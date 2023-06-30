@@ -1,5 +1,3 @@
-
-
 from swagger_server.persistence.repository import DbRepository
 from swagger_server.models.movie import Movie
 from injector import inject

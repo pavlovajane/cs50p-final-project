@@ -1,6 +1,4 @@
-
 import sqlite3
-
 
 def configure_database(binder):
     binder.bind(

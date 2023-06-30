@@ -1,4 +1,3 @@
-
 from injector import inject
 from swagger_server.models.user import User
 from swagger_server.models.users_body import UsersBody

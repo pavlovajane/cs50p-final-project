@@ -26,11 +26,34 @@ class UserService:
         id, = rows[0]
         return User(id=id)
     
-    def get_user_tops(self, repo: DbRepository) -> Tops:
-        pass
+    def get_user_tops(self, user_id: int) -> Tops:
+        """Get user's top quotes
+
+        :param user_id: User's int ID to get user's tops quotes
+
+        :return: Tops object (an array of quotes)
+        :rtype: Tops model
+        """
+        query = """
+            SELECT 
+            q.id, q.movie, q.scene_number, q.scene_name, q.type, q.character, q.text 
+            FROM tops as t 
+            LEFT JOIN scripts as q
+            ON q.id = t.quote_id
+            WHERE t.user_id = ?
+        """
+        rows = self.repo.find_all(query, (user_id,))
+        if len(rows) == 0:
+            return None
 
     def get_password_hash(self, username: str) -> str:
+        """Get user's hash from a database
 
+        :param username: str for a username
+
+        :return: user's password hash as str
+        :rtype: str
+        """
         query = """
                 SELECT 
                 hash 

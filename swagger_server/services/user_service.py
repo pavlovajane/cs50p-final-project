@@ -4,7 +4,7 @@ from swagger_server.models.user import User
 from swagger_server.models.users_body import UsersBody
 from swagger_server.persistence.repository import DbRepository
 
-from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.security import generate_password_hash
 
 class UserService:
 
@@ -45,6 +45,7 @@ class UserService:
         rows = self.repo.find_all(query, (user_id,))
         if len(rows) == 0:
             return None
+        return Tops(rows)
 
     def get_password_hash(self, username: str) -> str:
         """Get user's hash from a database

@@ -5,7 +5,7 @@ from swagger_server import util
 from swagger_server.services.movies_service import MoviesService
 
 
-def movies_get(service: MoviesService):  # noqa: E501
+def movies_get(movies_service: MoviesService):  # noqa: E501
     """Get a list of available to get quotes movies
 
      # noqa: E501
@@ -13,4 +13,4 @@ def movies_get(service: MoviesService):  # noqa: E501
 
     :rtype: Movie
     """
-    return service.find_all_movies()
+    return movies_service.find_all_movies()

@@ -12,7 +12,6 @@ def main():
     app.add_api('swagger.yaml', 
                 arguments={'title': 'MONTY PYTHON BEST QUOTES API'}, 
                 pythonic_params=True)
-    # FlaskInjector(app=app.app, modules=[configure_database])
     app.run(port=8080)
 
 

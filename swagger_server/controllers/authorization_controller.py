@@ -2,7 +2,7 @@ from typing import List
 from injector import inject
 from werkzeug.security import check_password_hash
 from swagger_server.services.user_service import UserService
-from swagger_server.persistence.database import dependency_resolver
+from swagger_server.dependencies import dependency_resolver
 """
 controller generated to handled auth operation described at:
 https://connexion.readthedocs.io/en/latest/security.html

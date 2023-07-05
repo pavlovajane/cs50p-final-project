@@ -47,7 +47,6 @@ class UserService:
             WHERE t.user_id = ?
         """
         rows = self.repo.find_all(query, (user_id,))
-        print(rows)
         if len(rows) == 0:
             return None
         

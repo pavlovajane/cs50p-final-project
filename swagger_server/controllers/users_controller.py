@@ -9,6 +9,8 @@ from swagger_server.models.users_body import UsersBody  # noqa: E501
 from swagger_server import util
 from swagger_server.services.user_service import UserService
 from werkzeug.exceptions import BadRequest
+from swagger_server.dependencies import dependency_resolver
+from flask import request
 
 
 def users_id_tops_get(id=None, **kwargs):  # noqa: E501
@@ -21,7 +23,9 @@ def users_id_tops_get(id=None, **kwargs):  # noqa: E501
 
     :rtype: Tops
     """
-    return 'do some magic!'
+    user_service: UserService = dependency_resolver.resolve(UserService)
+    id = request.view_args.get('id')
+    return user_service.get_user_tops(id)
 
 
 def users_id_tops_post(body, id):  # noqa: E501

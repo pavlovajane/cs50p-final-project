@@ -1,5 +1,9 @@
 from injector import inject
+from swagger_server.models.movie import Movie
+from swagger_server.models.quote import Quote
+from swagger_server.models.scene import Scene
 from swagger_server.models.tops import Tops
+from swagger_server.models.tops_inner import TopsInner
 from swagger_server.models.user import User
 from swagger_server.models.users_body import UsersBody
 from swagger_server.persistence.repository import DbRepository
@@ -43,9 +47,20 @@ class UserService:
             WHERE t.user_id = ?
         """
         rows = self.repo.find_all(query, (user_id,))
+        print(rows)
         if len(rows) == 0:
             return None
-        return Tops(rows)
+        
+        tops = []
+        for r in rows:
+            top = TopsInner(quote=Quote(id = r[0],
+                                        movie=Movie(name=r[1]),
+                                        scene=Scene(number=r[2],name=r[3]),
+                                        type=r[4],
+                                        character=r[5],
+                                        text=r[6]))
+            tops.append(top)
+        return tops
 
     def get_password_hash(self, username: str) -> str:
         """Get user's hash from a database

@@ -63,5 +63,5 @@ class UserService:
         if len(rows) == 0:
             return None
         hash = rows[0]
-        return hash
+        return hash[0]
         

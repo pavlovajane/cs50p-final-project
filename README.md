@@ -1,6 +1,6 @@
 # MONTY PYTHON BEST QUOTES API AND DATABASE
 
-#### Video Demo:  will go here <URL HERE>
+#### Video Demo:  TBD <URL HERE>
 
 #### Acknowledgements
 The data was scrapped from [Another bleeding Monty Python website](http://montypython.50webs.com/) for this open-source non-commercial project (started as a final project for [CS50’s Introduction to Programming with Python](https://cs50.harvard.edu/python/2022/project/)). All data is property of Monty Python group and will be removed upon their request.
@@ -12,17 +12,17 @@ With this API you can get phrases from 3 Monty Python movies: **Life of Brian**,
 
 The functionality allows you:
 * Create a user to save user's favourite quotes
-* Put a quote in your top quotes list
-* Get your top quotes list
 * Get a list of movies from which quotes are available
 * Get a random quote
-* Get a randome scene (all quotes from a scene)
 * Search for quote(s)
     1. From a specific movie and:
      1.1 From a scene by number
      1.2 From a scene by scene name
     2. By part of a quote
-* Get a whole scene text (all quotes)
+* Put a quote in your top quotes list
+* Get your top quotes list
+* Get a random scene (all quotes from this scene) [^1]
+* Get a whole scene text (all quotes) [^2]
     1. From a specific movie and:
         1.1 By a scene by number
         1.2 By a scene by scene name
@@ -127,3 +127,6 @@ Scrapped data are saved into csv file in the following format:
 ##### Data loader from CSV into SQLITE db dataloader.py
 
 You can create SQLITE lite tables using db statements from dbcreator.sql. Afterwards, it will be possible using dataloader.py to load your scrapped data from csv into the database. Each new load deletes all previous entries, be mindful of the autoincremented indexes if planning to use them.
+
+[^1] Functionality postponed to version 2
+[^2] Functionality postponed to version 2

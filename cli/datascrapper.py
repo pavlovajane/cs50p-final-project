@@ -1,6 +1,6 @@
 # logic to scrap data for the database from website or html file
 from bs4 import Tag, BeautifulSoup, NavigableString
-from typing import Dict
+from typing import Dict, List
 import argparse
 import collections, io
 import csv, requests
@@ -59,7 +59,16 @@ def check_cli_arguments() -> argparse.Namespace:
 
     return args
 
-def get_links() -> collections.abc.MutableSequence:
+def get_links() -> List:
+    """
+    Function create lists of url to htmls from http://montypython.50webs.com for three available scripts there
+    - Holy Grail
+    - Life of Brian
+    - Meaning of Life
+    :return: List of the urls
+    :rtype: List
+    """
+
     # one time operation - all data scrapped into parsed_results.csv
     links = []
 

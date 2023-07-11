@@ -4,7 +4,6 @@ import pyfiglet # type: ignore
 from pyfiglet import FigletString  # type: ignore
 from typing import Type, List, Any, Dict
 import requests
-import sys
 
 # global variable defining API server address
 SERVER_URL = "http://127.0.0.1:8080"
@@ -97,10 +96,8 @@ def show_options(state: str)->List[str]:
         "2 - Create a new user to store top quotes list",
         "3 - Get a random quote",
         "4 - Search for a quote/quotes",
-        "5 - Get a random scene (all quotes from a scene will be printed)",
-        "6 - Search for a scene by a movie name and scene name/number",
-        "7 - Add a quote to your top by quote's id",
-        "8 - Exit the program"
+        "5 - Add a quote to your top by quote's id",
+        "6 - Exit the program"
         ]
     elif state=="next":
         actions = [
@@ -158,7 +155,7 @@ def perform_action(choice: str, previous_choice: str)-> None:
     """
     global next_menu
     try:
-        if (next_menu and choice == "3") or (not next_menu and choice == "8"):
+        if (next_menu and choice == "3") or (not next_menu and choice == "6"):
             # user chose to exit
             show_exit()
             exit(0)

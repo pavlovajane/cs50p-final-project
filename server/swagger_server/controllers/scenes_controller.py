@@ -15,7 +15,7 @@ def scenes_random_get():  # noqa: E501
 
     :rtype: SceneWithQuotes
     """
-    return 'do some magic!'
+    return 'Some magic in the next version!'
 
 
 def scenes_search_get(movie, scene_number=None, scene_name=None, scene_number_or_name=None):  # noqa: E501
@@ -36,4 +36,4 @@ def scenes_search_get(movie, scene_number=None, scene_name=None, scene_number_or
     """
     if connexion.request.is_json:
         scene_number_or_name = SceneNumberOrName.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    return 'Some magic in the next version!'

@@ -9,6 +9,12 @@ import requests
 SERVER_URL = "http://127.0.0.1:8080"
 # indicate if "next" menu is shown
 next_menu = False
+# number for exit in menus
+exit_number = ["3","6"]
+# number for get movies in user menu
+get_movies = "1"
+# number for create user menu or return
+create_return = "2"
 
 def main() -> None:
     """
@@ -155,13 +161,13 @@ def perform_action(choice: str, previous_choice: str)-> None:
     """
     global next_menu
     try:
-        if (next_menu and choice == "3") or (not next_menu and choice == "6"):
+        if (next_menu and choice == exit_number[0]) or (not next_menu and choice == exit_number[1]):
             # user chose to exit
             show_exit()
             exit(0)
-        elif not next_menu or (next_menu and previous_choice == "1" and choice != "2"):
+        elif not next_menu or (next_menu and previous_choice == get_movies and choice != create_return):
             # if called from main menu or from next menu and user chosen option 1 == repeat the last action
-            if choice == "1":
+            if choice == get_movies:
                 # get movies list
                 response = send_get(f"{SERVER_URL}/movies")
                 if not response == None:
@@ -171,7 +177,7 @@ def perform_action(choice: str, previous_choice: str)-> None:
                 else:
                     show_something_wrong()
                     print(response)
-            elif choice == "2":
+            elif choice == create_return:
                 # create a new user
                 print("Enter new user's name and password")
                 username, password = get_user_credentials()
@@ -182,7 +188,11 @@ def perform_action(choice: str, previous_choice: str)-> None:
                     print("")
                 else:
                     print(response)
-        elif next_menu and choice == "2":
+            else:
+                # all non-implemented
+                print("Will be implemented soon, try another one!")
+                print("")
+        elif next_menu and choice == create_return:
             # user chose to return to main menu
             next_menu = not next_menu
     except KeyboardInterrupt:

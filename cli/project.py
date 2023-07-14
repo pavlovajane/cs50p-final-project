@@ -4,6 +4,7 @@ import pyfiglet # type: ignore
 from pyfiglet import FigletString  # type: ignore
 from typing import Type, List, Any, Dict
 import requests
+import json
 
 # global variable defining API server address
 SERVER_URL = "http://127.0.0.1:8080"
@@ -15,6 +16,10 @@ exit_number = ["3","6"]
 get_movies = "1"
 # number for create user menu or return
 create_return = "2"
+# number for get a random quote
+random_quote = "3"
+# number for search a quote
+search_quote = "4"
 
 def main() -> None:
     """
@@ -188,6 +193,17 @@ def perform_action(choice: str, previous_choice: str)-> None:
                     print("")
                 else:
                     print(response)
+            elif choice == random_quote:
+                # get a random quote
+                response = send_get(f"{SERVER_URL}/quotes/random")
+                if not response == None:
+                    print(json.dumps(response, indent=1))
+                    print("")
+                else:
+                    show_something_wrong()
+                    print(response)
+            elif choice == search_quote:
+                pass
             else:
                 # all non-implemented
                 print("Will be implemented soon, try another one!")

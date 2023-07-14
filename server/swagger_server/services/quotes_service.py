@@ -30,19 +30,19 @@ class QuotesService:
                     text=rows[0][6])
 
     def find_quote(self, text):
-        # TODO: find a quote or quotes by its text
+        
         rows =  self.repo.find_all("SELECT * FROM scripts WHERE text LIKE ?",(f"%{text}%",))
         if len(rows) == 0:
             return None
 
         quotes = []
         for r in rows:
-            quote = Quote(id = rows[0],
-                    movie=Movie(name=rows[1]),
-                    scene=Scene(number=rows[2],name=rows[3]),
-                    type=rows[4],
-                    character=rows[5],
-                    text=rows[6])
+            quote = Quote(id = r[0],
+                    movie=Movie(name=r[1]),
+                    scene=Scene(number=r[2],name=r[3]),
+                    type=r[4],
+                    character=r[5],
+                    text=r[6])
             quotes.append(quote)
 
         return quotes

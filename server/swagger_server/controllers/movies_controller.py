@@ -1,4 +1,3 @@
-
 from swagger_server.models.error import Error  # noqa: E501
 from swagger_server.models.movie import Movie  # noqa: E501
 from swagger_server import util

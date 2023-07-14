@@ -1,8 +1,8 @@
 from functools import lru_cache
 import sqlite3
+from swagger_server.services.quotes_service import QuotesService
 from swagger_server.persistence.repository import DbRepository
 from swagger_server.services.movies_service import MoviesService
-
 from swagger_server.services.user_service import UserService
 
 def configure_database(binder):
@@ -20,13 +20,16 @@ def get_movie_service(repo: DbRepository) -> 'MoviesService':
     return MoviesService(repo=repo)
 
 @lru_cache
+def get_quotes_service(repo: DbRepository) -> 'QuotesService':
+    return QuotesService(repo=repo)
+
+@lru_cache
 def get_user_service(repo: DbRepository) -> 'UserService':
     return UserService(repo=repo)
 
 @lru_cache
 def get_db() -> sqlite3.Connection:
     return sqlite3.connect("./swagger_server/persistence/holy_scripts.db", check_same_thread=False)
-    
 
 class DependencyResolver:
     def resolve(self, clazz: any) -> any:
@@ -38,6 +41,8 @@ class DependencyResolver:
             return get_movie_service(self.resolve(DbRepository))
         if clazz == DbRepository:
             return get_repository(self.resolve(sqlite3.Connection))
+        if clazz == QuotesService:
+            return get_quotes_service(self.resolve(DbRepository))
         raise ValueError(f"Can't resolve given class {clazz}")
 
 dependency_resolver = DependencyResolver()

@@ -20,7 +20,7 @@ class UserService:
         username = user.username
         hash = generate_password_hash(user.password)
         query = """
-            INSERT INTO users (username, hash) 
+            INSERT INTO users (username, hash)
                        VALUES (?, ?)
         """
         self.repo.execute_and_commit(query, (username, hash,))
@@ -29,7 +29,23 @@ class UserService:
             return None
         id, = rows[0]
         return User(id=id)
-    
+
+    def put_user_tops(self, user_id: int, quote_id: int) -> Tops:
+        """Put a qupte into user's top quotes
+        :param user_id: User's int ID to get user's tops quotes
+        :param quote_id: Quote int ID to put into top list
+        :return: Tops object (an array of quotes)
+        :rtype: Tops model
+        """
+        query = """
+            INSERT INTO tops (user_id, quote_id)
+                       VALUES (?, ?)
+        """
+        self.repo.execute_and_commit(query, (user_id, quote_id,))
+        # TODO This better be re-worked to return not a list but just success - okay for learning purposes for now
+        return self.get_user_tops(user_id)
+
+
     def get_user_tops(self, user_id: int) -> Tops:
         """Get user's top quotes
 
@@ -39,9 +55,9 @@ class UserService:
         :rtype: Tops model
         """
         query = """
-            SELECT 
-            q.id, q.movie, q.scene_number, q.scene_name, q.type, q.character, q.text 
-            FROM tops as t 
+            SELECT
+            q.id, q.movie, q.scene_number, q.scene_name, q.type, q.character, q.text
+            FROM tops as t
             LEFT JOIN scripts as q
             ON q.id = t.quote_id
             WHERE t.user_id = ?
@@ -49,7 +65,7 @@ class UserService:
         rows = self.repo.find_all(query, (user_id,))
         if len(rows) == 0:
             return None
-        
+
         tops = []
         for r in rows:
             top = TopsInner(quote=Quote(id = r[0],
@@ -70,12 +86,12 @@ class UserService:
         :rtype: str
         """
         query = """
-                SELECT 
-                hash 
+                SELECT
+                hash
                 FROM users WHERE username = ?"""
         rows = self.repo.find_all(query, (username,))
         if len(rows) == 0:
             return None
         hash = rows[0]
         return hash[0]
-        
+

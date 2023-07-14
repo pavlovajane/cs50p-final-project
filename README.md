@@ -14,12 +14,8 @@ The functionality allows you:
 * Create a user to save user's favourite quotes
 * Get a list of movies from which quotes are available
 * Get a random quote
-* Search for quote(s)
-    1. From a specific movie and:
-     1.1 From a scene by number
-     1.2 From a scene by scene name
-    2. By part of a quote
-* Put a quote in your top quotes list
+* Search for quote(s) by quote's text
+* Put a quote in your top quotes list by quote's id
 * Get your top quotes list
 * Get a random scene (all quotes from this scene) [^1]
 * Get a whole scene text (all quotes) [^2]

@@ -28,7 +28,7 @@ def users_id_tops_get(id=None, **kwargs):  # noqa: E501
     return user_service.get_user_tops(id)
 
 
-def users_id_tops_post(body, id):  # noqa: E501
+def users_id_tops_post(body, id=None, **kwargs):  # noqa: E501
     """Add a quote to user&#x27;s top quotes
 
      # noqa: E501
@@ -42,7 +42,10 @@ def users_id_tops_post(body, id):  # noqa: E501
     """
     if connexion.request.is_json:
         body = IdTopsBody.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+        user_service: UserService = dependency_resolver.resolve(UserService)
+        id = request.view_args.get('id')
+        return user_service.put_user_tops(id, body.id)
+    return BadRequest("Should be JSON")
 
 
 def users_post(body):  # noqa: E501

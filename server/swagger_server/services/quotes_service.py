@@ -13,10 +13,11 @@ class QuotesService:
 
     def get_random_quote(self):
         # randomize for an id
-        maxrows =  self.repo.find_all("SELECT COUNT(*) as count FROM scripts")
+        minrows =  self.repo.find_all("SELECT MIN(id) FROM scripts")
+        maxrows =  self.repo.find_all("SELECT MAX(id) FROM scripts")
         if len(maxrows) == 0:
             return None
-        random_id = random.randint(0,maxrows[0][0])
+        random_id = random.randint(minrows[0][0],maxrows[0][0])
 
         rows =  self.repo.find_all("SELECT * FROM scripts WHERE id = ?",(random_id,))
         if len(rows) == 0:

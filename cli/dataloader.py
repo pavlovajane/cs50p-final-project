@@ -6,7 +6,7 @@ def main():
     :return: No return value
     :rtype: None
     """
-    clear_and_load("cs50p/9.final/holy-grail-api/holy_scripts.csv", "cs50p/9.final/holy-grail-api/holy_scripts.db")
+    clear_and_load("./holy_scripts.csv", "./holy_scripts.db")
 
 def clear_and_load(csvfile: str, dbname: str) -> None:
     """

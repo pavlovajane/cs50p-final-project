@@ -20,6 +20,8 @@ create_return = "2"
 random_quote = "3"
 # number for search a quote
 search_quote = "4"
+# number for add a quote to user tops
+add_quote = "5"
 
 def main() -> None:
     """
@@ -203,6 +205,17 @@ def perform_action(choice: str, previous_choice: str)-> None:
                     show_something_wrong()
                     print(response)
             elif choice == search_quote:
+                # search for a quote
+                search_text = input("Enter a phrase to search a quote for: ").strip()
+                response = send_get(f"{SERVER_URL}/quotes/search?text={search_text}")
+                if not response == None:
+                    print(json.dumps(response, indent=1))
+                    print("")
+                else:
+                    show_something_wrong()
+                    print(response)
+            elif choice == add_quote:
+                # add quote to user's top list
                 pass
             else:
                 # all non-implemented

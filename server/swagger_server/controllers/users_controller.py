@@ -45,7 +45,7 @@ def users_id_tops_post(body, id):  # noqa: E501
     return 'do some magic!'
 
 
-def users_post(body, user_service: UserService):  # noqa: E501
+def users_post(body):  # noqa: E501
     """Create a new user
 
      # noqa: E501
@@ -57,5 +57,6 @@ def users_post(body, user_service: UserService):  # noqa: E501
     """
     if connexion.request.is_json:
         body = UsersBody.from_dict(connexion.request.get_json())  # noqa: E501
+        user_service: UserService = dependency_resolver.resolve(UserService)
         return user_service.create_user(body)
     return BadRequest("Should be JSON")

@@ -1,5 +1,5 @@
 from getpass import getpass
-from urllib.request import HTTPBasicAuthHandler
+from requests.auth import HTTPBasicAuth
 import pyfiglet # type: ignore
 from pyfiglet import FigletString  # type: ignore
 from typing import Type, List, Any, Dict
@@ -175,8 +175,10 @@ def perform_action(choice: str, previous_choice: str)-> None:
             # user chose to exit
             show_exit()
             exit(0)
-        elif not next_menu or (next_menu and previous_choice == get_movies and choice != create_return):
+        elif not next_menu or (next_menu and choice == get_movies and choice != create_return):
             # if called from main menu or from next menu and user chosen option 1 == repeat the last action
+            if next_menu and choice == get_movies:
+                choice = previous_choice
             if choice == get_movies:
                 # get movies list
                 response = send_get(f"{SERVER_URL}/movies")
@@ -233,9 +235,7 @@ def perform_action(choice: str, previous_choice: str)-> None:
                 username, password = get_user_credentials()
                 creds = [username, password]
                 response = send_get(f"{SERVER_URL}/users/id", creds)
-
                 if not response == None:
-                    print(response)
                     user_id = response
                 else:
                     print(response)
@@ -270,7 +270,7 @@ def send_get(url: str, credentials: List[str] = list())-> Any:
     :return: Return json of the result or None if status code was not == ok
     :rtype: Any
     """
-    response = requests.get(url, auth=HTTPBasicAuthHandler(credentials) if len(credentials)>0 else "")
+    response = requests.get(url, auth=HTTPBasicAuth(*credentials) if len(credentials)>0 else "")
 
     if response.status_code == requests.codes.ok:
         return response.json()
@@ -286,7 +286,7 @@ def send_post(url: str, payload: Dict[str,str] = {}, credentials: List[str] = li
     :return: Return json of the result or None if status code was not == ok
     :rtype: Any
     """
-    response = requests.post(url, json=payload if len(payload)>0 else "", auth=HTTPBasicAuthHandler(credentials) if len(credentials)>0 else "")
+    response = requests.post(url, json=payload if len(payload)>0 else "", auth=HTTPBasicAuth(*credentials) if len(credentials)>0 else "")
 
     if response.status_code == requests.codes.ok:
         return response.json()

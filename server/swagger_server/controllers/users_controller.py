@@ -38,9 +38,9 @@ def users_currentid_get(**kwargs):  # noqa: E501
     """
     auth = connexion.request.authorization
     if auth and auth.type == 'basic':
-        body = UsersBody.from_dict({'username': auth.username, 'password': auth.password})
         user_service: UserService = dependency_resolver.resolve(UserService)
-        return user_service.get_user_id(body)
+        return user_service.get_user_id(auth.username)
+    return BadRequest("Should be basic auth")
 
 def users_id_tops_post(body, id=None, **kwargs):  # noqa: E501
     """Add a quote to user&#x27;s top quotes

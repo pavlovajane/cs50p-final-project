@@ -16,9 +16,8 @@ class UserService:
     def __init__(self, repo: DbRepository) -> None:
         self.repo = repo
 
-    def get_user_id(self, user: UsersBody) -> int:
+    def get_user_id(self, username: str) -> int:
         # get user id from current username
-        username = user.username
         rows = self.repo.find_all("SELECT id FROM users WHERE username = ?", (username,))
         if len(rows) == 0:
             return None

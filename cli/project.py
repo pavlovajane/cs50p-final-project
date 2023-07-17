@@ -11,7 +11,7 @@ SERVER_URL = "http://127.0.0.1:8080"
 # indicate if "next" menu is shown
 next_menu = False
 # number for exit in menus
-exit_number = ["3","6"]
+exit_number = ["3","7"]
 # number for get movies in user menu
 get_movies = "1"
 # number for create user menu or return
@@ -22,6 +22,8 @@ random_quote = "3"
 search_quote = "4"
 # number for add a quote to user tops
 add_quote = "5"
+# number for get user's top quotes
+get_tops = "6"
 
 def main() -> None:
     """
@@ -110,7 +112,8 @@ def show_options(state: str)->List[str]:
         "3 - Get a random quote",
         "4 - Search for a quote/quotes",
         "5 - Add a quote to your top by quote's id",
-        "6 - Exit the program"
+        "6 - Get user's top quotes",
+        "7 - Exit the program"
         ]
     elif state=="next":
         actions = [
@@ -216,6 +219,36 @@ def perform_action(choice: str, previous_choice: str)-> None:
                     print(response)
             elif choice == add_quote:
                 # add quote to user's top list
+                while True:
+                    try:
+                        quote_number = int(input("Id of a quote to add to the top quotes: "))
+                        break
+                    except ValueError:
+                        print("Only integers are allowed. Try again")
+                        print("")
+                        continue
+                print("Enter user's name and password")
+                # the program won't save user and password in session by design
+                # as it will require also log-out functionality - could be a future development
+                username, password = get_user_credentials()
+                creds = [username, password]
+                response = send_get(f"{SERVER_URL}/users/id", creds)
+
+                if not response == None:
+                    print(response)
+                    user_id = response
+                else:
+                    print(response)
+
+                payload = {"id": quote_number}
+                response = send_post(f"{SERVER_URL}/users/{user_id}/tops", payload, creds)
+                if not response == None:
+                    print(json.dumps(response, indent=1))
+                    print("")
+                else:
+                    print(response)
+            elif choice == get_tops:
+                # get tops of the user
                 pass
             else:
                 # all non-implemented
@@ -230,15 +263,14 @@ def perform_action(choice: str, previous_choice: str)-> None:
         next_menu = True
         show_something_wrong()
 
-
-def send_get(url: str)-> Any:
+def send_get(url: str, credentials: List[str] = list())-> Any:
     """
     Function receives an url and return the result of a get request
     :param url: Url to perform get request
     :return: Return json of the result or None if status code was not == ok
     :rtype: Any
     """
-    response = requests.get(url)
+    response = requests.get(url, auth=HTTPBasicAuthHandler(credentials) if len(credentials)>0 else "")
 
     if response.status_code == requests.codes.ok:
         return response.json()

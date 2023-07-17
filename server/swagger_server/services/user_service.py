@@ -16,6 +16,15 @@ class UserService:
     def __init__(self, repo: DbRepository) -> None:
         self.repo = repo
 
+    def get_user_id(self, user: UsersBody) -> int:
+        # get user id from current username
+        username = user.username
+        rows = self.repo.find_all("SELECT id FROM users WHERE username = ?", (username,))
+        if len(rows) == 0:
+            return None
+        id, = rows[0]
+        return id
+
     def create_user(self, user: UsersBody) -> User:
         username = user.username
         hash = generate_password_hash(user.password)

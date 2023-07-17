@@ -1,5 +1,4 @@
 import connexion
-import six
 
 from swagger_server.models.error import Error  # noqa: E501
 from swagger_server.models.id_tops_body import IdTopsBody  # noqa: E501
@@ -27,6 +26,21 @@ def users_id_tops_get(id=None, **kwargs):  # noqa: E501
     id = request.view_args.get('id')
     return user_service.get_user_tops(id)
 
+def users_currentid_get(**kwargs):  # noqa: E501
+    """Get user&#x27;s top quotes sorted by quote&#x27;s text
+
+     # noqa: E501
+
+    :param id: User ID
+    :type id: int
+
+    :rtype: Tops
+    """
+    auth = connexion.request.authorization
+    if auth and auth.type == 'basic':
+        body = UsersBody.from_dict({'username': auth.username, 'password': auth.password})
+        user_service: UserService = dependency_resolver.resolve(UserService)
+        return user_service.get_user_id(body)
 
 def users_id_tops_post(body, id=None, **kwargs):  # noqa: E501
     """Add a quote to user&#x27;s top quotes

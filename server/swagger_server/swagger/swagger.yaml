@@ -4,8 +4,8 @@ info:
   description: "With this API you can get quotes/scenes from 3 Monty Python movies:\
     \ 'Life of Brian', 'The Meaning of ' and 'Monty Python and The Holy Grail'. \n\
     User can get a quote or a whole scene. To find a specfic quote the user can use\
-    \ part of this quote, scene name/number and movie name. If the user registers\
-    \ with this API, they can also create their top favourite quotes list."
+    \ part of this quote. If the user registers with this API, they can also create\
+    \ their top favourite quotes list."
   version: 1.0.0
 servers:
 - url: /
@@ -111,6 +111,42 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Tops'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: The specified resource was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error
+      security:
+      - basicAuth: []
+      x-openapi-router-controller: swagger_server.controllers.users_controller
+  /users/id:
+    get:
+      tags:
+      - users
+      summary: Get user's id
+      operationId: users_currentid_get
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
         "400":
           description: Bad request
           content:
@@ -317,6 +353,19 @@ paths:
         "5XX":
           description: Unexpected error
       x-openapi-router-controller: swagger_server.controllers.movies_controller
+  /health:
+    get:
+      tags:
+      - health
+      summary: Check API health
+      description: Returns a 200 OK response if the API is up and running
+      operationId: health_get
+      responses:
+        "200":
+          description: API is up
+        "5XX":
+          description: API is down
+      x-openapi-router-controller: swagger_server.controllers.health_controller
 components:
   schemas:
     User:

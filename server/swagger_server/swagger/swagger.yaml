@@ -42,7 +42,7 @@ paths:
     get:
       tags:
       - users
-      summary: Get user's top quotes sorted by quote's text
+      summary: Get user's top quotes 
       operationId: users_id_tops_get
       parameters:
       - name: id

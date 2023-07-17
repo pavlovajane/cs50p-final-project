@@ -27,7 +27,7 @@ def users_id_tops_get(id=None, **kwargs):  # noqa: E501
     return user_service.get_user_tops(id)
 
 def users_currentid_get(**kwargs):  # noqa: E501
-    """Get user&#x27;s top quotes sorted by quote&#x27;s text
+    """Get user's top quotes
 
      # noqa: E501
 

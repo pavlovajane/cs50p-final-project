@@ -179,16 +179,16 @@ def perform_action(choice: str, previous_choice: str)-> None:
             # if called from main menu or from next menu and user chosen option 1 == repeat the last action
             if next_menu and choice == get_movies:
                 choice = previous_choice
+
             if choice == get_movies:
                 # get movies list
                 response = send_get(f"{SERVER_URL}/movies")
                 if not response == None:
-                    for movie in response:
-                        print(movie["name"][0])
+                    print(json.dumps(response, indent=1))
                     print("")
                 else:
                     show_something_wrong()
-                    print(response)
+
             elif choice == create_return:
                 # create a new user
                 print("Enter new user's name and password")
@@ -199,7 +199,8 @@ def perform_action(choice: str, previous_choice: str)-> None:
                     print(f"User was created with id: {response['id']}")
                     print("")
                 else:
-                    print(response)
+                    show_something_wrong()
+
             elif choice == random_quote:
                 # get a random quote
                 response = send_get(f"{SERVER_URL}/quotes/random")
@@ -208,7 +209,7 @@ def perform_action(choice: str, previous_choice: str)-> None:
                     print("")
                 else:
                     show_something_wrong()
-                    print(response)
+
             elif choice == search_quote:
                 # search for a quote
                 search_text = input("Enter a phrase to search a quote for: ").strip()
@@ -218,7 +219,7 @@ def perform_action(choice: str, previous_choice: str)-> None:
                     print("")
                 else:
                     show_something_wrong()
-                    print(response)
+
             elif choice == add_quote:
                 # add quote to user's top list
                 while True:
@@ -238,7 +239,7 @@ def perform_action(choice: str, previous_choice: str)-> None:
                 if not response == None:
                     user_id = response
                 else:
-                    print(response)
+                    show_something_wrong()
 
                 payload = {"id": quote_number}
                 response = send_post(f"{SERVER_URL}/users/{user_id}/tops", payload, creds)
@@ -246,10 +247,26 @@ def perform_action(choice: str, previous_choice: str)-> None:
                     print(json.dumps(response, indent=1))
                     print("")
                 else:
-                    print(response)
+                    show_something_wrong()
+
             elif choice == get_tops:
-                # get tops of the user
-                pass
+                # get user's top quotes
+                print("Enter user's name and password")
+                # the program won't save user and password in session by design
+                # as it will require also log-out functionality - could be a future development
+                username, password = get_user_credentials()
+                creds = [username, password]
+
+                user_id = send_get(f"{SERVER_URL}/users/id", creds)
+                if not user_id == None:
+                    response = send_get(f"{SERVER_URL}/users/{user_id}/tops", creds)
+                else:
+                    response = None
+
+                if not response == None:
+                    print(json.dumps(response, indent=1))
+                else:
+                    show_something_wrong()
             else:
                 # all non-implemented
                 print("Will be implemented soon, try another one!")

@@ -2,7 +2,7 @@ from getpass import getpass
 from requests.auth import HTTPBasicAuth
 import pyfiglet # type: ignore
 from pyfiglet import FigletString  # type: ignore
-from typing import Type, List, Any, Dict
+from typing import Type, List, Any, Dict, Union, cast
 import requests
 import json
 
@@ -97,7 +97,7 @@ def show_exit()->None:
     print("")
 
 
-def show_options(state: str)->List[str]:
+def show_options(state: str) -> Union[List[str], None]:
     """
     Function prints available option from the current point of program's flow
     :param state: String parameter defining the logic - which options to show
@@ -131,7 +131,7 @@ def show_options(state: str)->List[str]:
     else:
         return None
 
-def check_choice_validity(choice: str, actions: List[str])-> bool:
+def check_choice_validity(choice: Union[str, None], actions: Union[List[str], None])-> bool:
     """
     Function receive a int with a number of user's choice and perform one of the API calls accordingly
     :param choice: Integer parameter defining user's choice of action
@@ -139,6 +139,8 @@ def check_choice_validity(choice: str, actions: List[str])-> bool:
     :rtype: Boolean
     """
     try:
+        if choice is None or actions is None:
+            return False
         choice_as_number = int(choice)
         if actions[choice_as_number-1].find(str(choice_as_number)) != -1:
             return True
@@ -287,7 +289,10 @@ def send_get(url: str, credentials: List[str] = list())-> Any:
     :return: Return json of the result or None if status code was not == ok
     :rtype: Any
     """
-    response = requests.get(url, auth=HTTPBasicAuth(*credentials) if len(credentials)>0 else "")
+    if len(credentials)>0:
+        response = requests.get(url, auth=HTTPBasicAuth(*credentials))
+    else:
+        response = requests.get(url)
 
     if response.status_code == requests.codes.ok:
         return response.json()
@@ -295,7 +300,7 @@ def send_get(url: str, credentials: List[str] = list())-> Any:
         print("Error:", response.text)
         return None
 
-def send_post(url: str, payload: Dict[str,str] = {}, credentials: List[str] = list())-> Any:
+def send_post(url: str, payload: Union[Dict[str,int],Dict[str,str]] = cast(Union[Dict[str, int], Dict[str, str]], None), credentials: List[str] = list())-> Any:
     """
     Function receives an url and return the result of a post request
     :param url: Url to perform get request
@@ -303,7 +308,13 @@ def send_post(url: str, payload: Dict[str,str] = {}, credentials: List[str] = li
     :return: Return json of the result or None if status code was not == ok
     :rtype: Any
     """
-    response = requests.post(url, json=payload if len(payload)>0 else "", auth=HTTPBasicAuth(*credentials) if len(credentials)>0 else "")
+    if payload is None:
+        payload = {}
+
+    if len(credentials)>0:
+        response = requests.post(url, json=payload, auth=HTTPBasicAuth(*credentials))
+    else:
+        response = requests.post(url, json=payload)
 
     if response.status_code == requests.codes.ok:
         return response.json()

@@ -8,8 +8,6 @@ import json
 
 # global variable defining API server address
 SERVER_URL = "http://127.0.0.1:8080"
-# indicate if "next" menu is shown
-next_menu = False
 # number for exit in menus
 exit_number = ["3","7"]
 # number for get movies in user menu
@@ -42,7 +40,9 @@ def main() -> None:
             print("")
             if not check_choice_validity(choice, actions):
                 continue
-            perform_action(choice, prev_choice)
+            # indicate if "next" menu is shown
+            next_menu = False
+            perform_action(choice, prev_choice, next_menu)
             actions = show_options("next" if next_menu else "main")
         except KeyboardInterrupt:
             show_exit()
@@ -163,7 +163,7 @@ def show_something_wrong()->None:
     print("")
 
 
-def perform_action(choice: str, previous_choice: str)-> None:
+def perform_action(choice: str, previous_choice: str, next_menu: bool)-> None:
     """
     Function receive a int with a number of user's choice and perform one of the API calls accordingly
     :param choice: String parameter defining user's choice of action
@@ -171,7 +171,6 @@ def perform_action(choice: str, previous_choice: str)-> None:
     :return: No return value
     :rtype: None
     """
-    global next_menu
     try:
         if (next_menu and choice == exit_number[0]) or (not next_menu and choice == exit_number[1]):
             # user chose to exit

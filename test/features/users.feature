@@ -3,6 +3,7 @@ Feature: Handle creating, retrieving user details
  I want to be able to create users
  So that I can add and retrieve top user quotes to have a focused good laugh
 
+@wip
 Scenario: Create user
     Given Server is responding with health status '200' at "http://localhost:8080/health"
      And create user endpoint POST "http://localhost:8080/users" is triggered

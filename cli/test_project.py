@@ -14,7 +14,7 @@ module_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'ser
 @pytest.fixture(scope='session', autouse=True)
 def server():
     # Start the server as a subprocess
-    server_process = subprocess.Popen(['python', '-m', 'swagger_server'], cwd=module_path)
+    server_process = subprocess.Popen(['python', '-m', 'swagger_server', '-db', '/holy_scripts_tests.db'], cwd=module_path)
 
     # Wait for the server to start
     time.sleep(2)

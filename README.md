@@ -1,6 +1,6 @@
-# MONTY PYTHON BEST QUOTES API AND DATABASE
+# MONTY PYTHON QUOTES API (aka HOLY GRAIL API)
 
-#### Video Demo:  TBD <URL HERE>
+#### Video Demo:  [Showcase somehow on a lengthy side](https://youtu.be/4y4IUAh4s_c)
 
 #### Acknowledgements
 The data was scrapped from [Another bleeding Monty Python website](http://montypython.50webs.com/) for this open-source non-commercial project (started as a final project for [CS50’s Introduction to Programming with Python](https://cs50.harvard.edu/python/2022/project/)). All data is property of Monty Python group and will be removed upon their request.
@@ -45,8 +45,8 @@ To run the server, please execute the following from the root directory:
 
 ```
 pip3 install -r requirements.txt
-python3 -m swagger_server
-```
+python3 -m swagger_server -db holy_scripts.db
+``` [^3]
 
 and open your browser here:
 
@@ -112,6 +112,8 @@ Ah, now we see the violence inherent in the system.
 <h1>Scene 3: Repression is Nine Tenths of the Law?</h1>
 ```
 
+Any deviations found were cleaned up but still some abnormalities can stay within data.
+
 ###### Output into csv format
 
 Scrapped data are saved into csv file in the following format:
@@ -126,3 +128,4 @@ You can create SQLITE lite tables using db statements from dbcreator.sql. Afterw
 
 [^1] Functionality postponed to version 2
 [^2] Functionality postponed to version 2
+[^3] holy_scripts_test.db is used for tests (pytest and BDD with behave)

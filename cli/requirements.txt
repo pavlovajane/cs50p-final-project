@@ -7,7 +7,8 @@ types-requests
 types-beautifulsoup4
 requests==2.21.0
 Flask==2.0.3
-pyOpenSSL==19.0.0
+Flask-Testing
+pyOpenSSL>=19.0.0
 Flask-Login==0.4.1
 connexion >= 2.6.0
 connexion[swagger-ui] >= 2.6.0

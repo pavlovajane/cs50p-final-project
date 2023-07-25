@@ -53,11 +53,11 @@ def test_function_check_choice_validity():
         "3 - Exit the program"
         ]) == False
 
-
-def test_should_generate_start_menu():
-    cli_process = subprocess.Popen(['python3', 'project.py'], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
-    out = cli_process.communicate(input=b'1\n7\n')[0]
-    print(out.decode().split("===================================")[2])
+# Not finalized test for testing string output, disabled
+# def test_should_generate_start_menu():
+#     cli_process = subprocess.Popen(['python3', 'project.py'], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
+#     out = cli_process.communicate(input=b'1\n7\n')[0]
+#     print(out.decode().split("===================================")[2])
 
 
 def test_show_exit():

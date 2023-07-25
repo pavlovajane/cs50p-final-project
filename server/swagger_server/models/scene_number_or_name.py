@@ -25,7 +25,7 @@ class SceneNumberOrName(Model):
         }
 
     @classmethod
-    def from_dict(cls, dikt) -> 'SceneNumberName':
+    def from_dict(cls, dikt) -> 'SceneNumberOrName':
         """Returns the dict as a model
 
         :param dikt: A dict.

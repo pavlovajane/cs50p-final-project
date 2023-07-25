@@ -14,7 +14,7 @@ module_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'ser
 @pytest.fixture(scope='session', autouse=True)
 def server():
     # Start the server as a subprocess
-    server_process = subprocess.Popen(['python', '-m', 'swagger_server', '-db', '/holy_scripts_tests.db'], cwd=module_path)
+    server_process = subprocess.Popen(['python3', '-m', 'swagger_server', '-db', '/holy_scripts_tests.db'], cwd=module_path)
 
     # Wait for the server to start
     time.sleep(2)
@@ -55,7 +55,7 @@ def test_function_check_choice_validity():
 
 
 def test_should_generate_start_menu():
-    cli_process = subprocess.Popen(['python', 'project.py'], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
+    cli_process = subprocess.Popen(['python3', 'project.py'], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
     out = cli_process.communicate(input=b'1\n7\n')[0]
     print(out.decode().split("===================================")[2])
 

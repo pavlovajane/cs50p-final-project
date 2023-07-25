@@ -15,7 +15,7 @@ class SceneNumberOrName(Model):
     Do not edit the class manually.
     """
     def __init__(self):  # noqa: E501
-        """SceneNumberName - a model defined in Swagger
+        """SceneNumberOrName - a model defined in Swagger
 
         """
         self.swagger_types = {
@@ -30,7 +30,7 @@ class SceneNumberOrName(Model):
 
         :param dikt: A dict.
         :type: dict
-        :return: The scene_number_name of this SceneNumberName.  # noqa: E501
-        :rtype: SceneNumberName
+        :return: The scene_number_name of this SceneNumberOrName.  # noqa: E501
+        :rtype: SceneNumberOrName
         """
         return util.deserialize_model(dikt, cls)

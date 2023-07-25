@@ -27,3 +27,11 @@ COPY server /src/server
 ENTRYPOINT ["pytest"]
 
 CMD ["cli"]
+
+# FROM builder as production
+
+# WORKDIR /src
+
+# COPY server /src/server
+
+# CMD ["apache2"]

@@ -72,3 +72,6 @@ def test_show_exit():
 Program closed by user
 ===================================
 """.strip()
+    
+def test_always_false():
+    assert True == False

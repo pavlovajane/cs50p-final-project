@@ -1,6 +1,6 @@
 # MONTY PYTHON QUOTES API (aka HOLY GRAIL API)
 
-#### Video Demo:  [Showcase somehow on a lengthy side](https://youtu.be/4y4IUAh4s_c)
+#### Video Demo:  [Showcase](https://youtu.be/4y4IUAh4s_c)
 
 #### Acknowledgements
 The data was scrapped from [Another bleeding Monty Python website](http://montypython.50webs.com/) for this open-source non-commercial project (started as a final project for [CS50’s Introduction to Programming with Python](https://cs50.harvard.edu/python/2022/project/)). All data is property of Monty Python group and will be removed upon their request.
@@ -125,6 +125,24 @@ Scrapped data are saved into csv file in the following format:
 ##### Data loader from CSV into SQLITE db dataloader.py
 
 You can create SQLITE lite tables using db statements from dbcreator.sql. Afterwards, it will be possible using dataloader.py to load your scrapped data from csv into the database. Each new load deletes all previous entries, be mindful of the autoincremented indexes if planning to use them.
+
+##### Tests
+
+A separate database copy ./server/swagger_server/persistance/holy_scripts.db is used for test
+
+###### Unit test and integration tests with pytest
+Doesn't provide 100% coverage and intended as an example for both unit and integration test.
+Located at ./cli/test_project.py (test the project.py only).
+
+###### Behaviour-driven tests with behave
+
+Located at ./test/behave. Can be run with:
+```
+behave feature/<name_of_feature_file>.feature
+```
+* Feature files are in ./test/behave/feature
+* Steps implementations are located at ./test/steps
+* ./test/enviroment.py has implementation of the actions done before_all and setting testing enviroment
 
 [^1] Functionality postponed to version 2
 [^2] Functionality postponed to version 2

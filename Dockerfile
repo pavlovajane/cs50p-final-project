@@ -28,10 +28,45 @@ ENTRYPOINT ["pytest"]
 
 CMD ["cli"]
 
-# FROM builder as production
+FROM builder as production
 
-# WORKDIR /src
+# install apache and mod-wsgi
+RUN : \
+    && apt-get update  \
+    && apt-get install --no-install-recommends -y \
+        apache2  \
+        apache2-dev \
+    && apt-get clean \
+    && apt-get autoremove \
+    && rm -rf /var/lib/apt/lists/* \
+    && pip3 install --no-cache-dir mod-wsgi==4.9.4 \
+    && :
 
-# COPY server /src/server
+# create wsgi module config and enable it
+RUN : \
+    && mod_wsgi-express module-config > /etc/apache2/mods-available/wsgi.load \
+    && a2enmod wsgi \
+    && :
 
-# CMD ["apache2"]
+# copy apache config
+ADD apache2/service_apache.conf /etc/apache2/sites-available/
+ADD apache2/flask_api.wsgi /var/www/flask_api/
+
+# enable apache sites
+RUN : \
+    && a2ensite service_apache.conf \
+    && a2dissite 000-default \
+    && :
+
+WORKDIR /src
+
+COPY server/swagger_server /src/swagger_server
+
+# link apache config to docker logs
+RUN : \
+    && ln -sf /proc/self/fd/1 /var/log/apache2/access.log \
+    && ln -sf /proc/self/fd/1 /var/log/apache2/error.log \
+    && ln -sf /proc/self/fd/1 /var/log/apache2/other_vhosts_access.log \
+    && :
+
+CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]

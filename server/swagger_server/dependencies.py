@@ -53,7 +53,7 @@ class DependencyResolver:
 
 
 parser = argparse.ArgumentParser(prog="dependencies.py", description="Resolve dependencies")
-parser.add_argument("-db", help="Path to a sqlite database db file")
+parser.add_argument("-db", default="holy_scripts.db", help="Path to a sqlite database db file")
 args = parser.parse_args()
 
 

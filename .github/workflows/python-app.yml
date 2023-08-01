@@ -28,7 +28,8 @@ jobs:
         docker build --tag holy-grail-prod:latest --target production -f Dockerfile .        
     - name: Deploy
       run: |
-        docker run --rm -d -p 80:80 holy-grail-prod:latest
+        docker kill holy-grail-api || true
+        docker run --name holy-grail-api --rm -d -p 80:80 holy-grail-prod:latest
   
     # - name: Lint with flake8
     #   run: |

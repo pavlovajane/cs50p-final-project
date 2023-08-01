@@ -23,6 +23,13 @@ jobs:
       run: |
         docker build --tag holy-grail-testing:latest --target testing -f Dockerfile .
         docker run --rm holy-grail-testing:latest
+    - name: Build Docker Image
+      run: |
+        docker build --tag holy-grail-prod:latest --target production -f Dockerfile .        
+    - name: Deploy
+      run: |
+        docker run --rm -d -p 80:80 holy-grail-prod:latest
+  
     # - name: Lint with flake8
     #   run: |
     #     # stop the build if there are Python syntax errors or undefined names

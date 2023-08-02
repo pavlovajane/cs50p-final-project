@@ -24,10 +24,6 @@ RUN pip3 install --no-cache-dir -r test_requirements.txt
 COPY cli /src/cli
 COPY server /src/server
 
-ENTRYPOINT ["pytest"]
-
-CMD ["cli"]
-
 FROM builder as production
 
 # install apache and mod-wsgi

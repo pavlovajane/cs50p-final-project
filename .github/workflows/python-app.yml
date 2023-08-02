@@ -23,7 +23,8 @@ jobs:
       run: |
         docker build --tag holy-grail-testing:latest --target testing -f Dockerfile .
         docker run --rm holy-grail-testing:latest pytest cli
-        docker run --rm holy-grail-testing:latest flake8 cli
+        docker run --rm holy-grail-testing:latest flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        docker run --rm holy-grail-testing:latest flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Build Docker Image
       run: |
         docker build --tag holy-grail-prod:latest --target production -f Dockerfile .        
